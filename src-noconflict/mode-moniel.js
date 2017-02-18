@@ -61,11 +61,6 @@ var MonielHighlightRules = function() {
    this.$rules = {
         "start" : [
             {
-                token : "comment",
-                regex : /\/\/.*$/
-            },
-            
-            {
                 regex : "{",
                 token : "lparen",
                 next  : "start"
@@ -82,9 +77,14 @@ var MonielHighlightRules = function() {
             },
             
             {
-                regex : "\\/\\*",
+                regex : /\/\//,
                 token : "comment",
                 next  : "comment"
+            },
+
+            {
+                token : "comment",
+                regex : /\/\*.*$/
             },
             
             {
@@ -154,7 +154,7 @@ var MonielHighlightRules = function() {
         ],
     "comment": [
             {
-                regex : "\\*\\/",
+                regex : /\*\//,
                 token : "comment",
                 next  : "start"
             },
@@ -213,6 +213,22 @@ var MonielBehaviour = function () {
         if (!range.isMultiLine() && selected === '->') {
             return newRange;
         }
+    });
+
+    this.add("splittedArrow", "insertion", function(state, action, editor, session, text) {
+            var cursor = editor.getCursorPosition();
+            var line = session.doc.getLine(cursor.row);
+            var arrow = line.substring(cursor.column - 1, cursor.column + 1);
+
+            if (arrow === "->") {
+                var t = (text === " " ? "" : text)
+                var tl = t.length
+
+                return {
+                    text: "> " + t + " -",
+                    selection: [2 + tl,2 + tl]
+                }    
+            }
     });
 
 }
@@ -379,8 +395,8 @@ oop.inherits(Mode, TextMode);
 
 (function() {
 
-    this.lineCommentStart = "//";
-    this.blockComment = {start: "/*", end: "*/"};
+    this.lineCommentStart = "|";
+    this.blockComment = {start: "||", end: "||"};
     this.$id = "ace/mode/moniel";
 }).call(Mode.prototype);
 
