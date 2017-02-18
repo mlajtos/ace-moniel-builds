@@ -77,14 +77,14 @@ var MonielHighlightRules = function() {
             },
             
             {
-                regex : /\/\//,
+                regex : /\/\*/,
                 token : "comment",
                 next  : "comment"
             },
 
             {
                 token : "comment",
-                regex : /\/\*.*$/
+                regex : /\/\/.*$/
             },
             
             {
@@ -114,7 +114,7 @@ var MonielHighlightRules = function() {
                 next  : "start"
             }, {
                 regex : "([a-z][0-9a-zA-Z_]*)",
-                token : "variable.parameter",
+                token : "variable.parameter"
             }, {
                 regex : "=",
                 token : "keyword.operator",
@@ -395,8 +395,8 @@ oop.inherits(Mode, TextMode);
 
 (function() {
 
-    this.lineCommentStart = "|";
-    this.blockComment = {start: "||", end: "||"};
+    this.lineCommentStart = "//";
+    this.blockComment = {start: "/*", end: "*/"};
     this.$id = "ace/mode/moniel";
 }).call(Mode.prototype);
 
